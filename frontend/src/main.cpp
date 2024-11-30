@@ -1,8 +1,22 @@
 #include <curl/curl.h>
+#include <nlohmann/json.hpp>
+#include <fstream>
 #include <iostream>
+#include <format>
+
+using namespace std;
+using json = nlohmann::json;
 
 auto main() -> int
 {
+    ifstream file("../config/config.json");
+    json config = json::parse(file);
+
+    string base_url = format("{}://{}:{}",
+                             config["protocol"].get<string>(),
+                             config["host"].get<string>(),
+                             config["port"].get<int>());
+
     CURL *curl;
     CURLcode res;
 
@@ -13,7 +27,7 @@ auto main() -> int
     if (curl)
     {
         // Establecer la URL
-        curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:8080");
+        curl_easy_setopt(curl, CURLOPT_URL, base_url.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, stdout);
 
         // Realizar la solicitud GET
