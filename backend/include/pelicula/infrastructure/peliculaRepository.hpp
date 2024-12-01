@@ -11,7 +11,7 @@ class PeliculaRepository : public Repository<string, Pelicula>, public makeSingl
 {
     friend class makeSingleton<PeliculaRepository>;
     void loadData(const string &dataRoute) override;
-    PeliculaRepository() { loadData("../../../database/limpio.csv"); }
+    PeliculaRepository() { loadData("../backend/database/limpio.csv"); }
 
 public:
     virtual ~PeliculaRepository() = default;
