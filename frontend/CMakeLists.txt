@@ -11,6 +11,7 @@ add_executable(
 )
 
 find_package(CURL REQUIRED)
+find_package(Threads REQUIRED)
 
 # Archivos de cabecera
 target_include_directories(Streaming_client PRIVATE 
@@ -21,6 +22,7 @@ target_include_directories(Streaming_client PRIVATE
 # Enlazar Bibliotecas necesarias
 target_link_libraries(Streaming_client PRIVATE
         nlohmann_json::nlohmann_json
+        Threads::Threads
         ${CURL_LIBRARIES}
 )
 

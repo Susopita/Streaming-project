@@ -1,8 +1,10 @@
-#include <curl/curl.h>
+#include <httplib.h>
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
 #include <format>
+#include <thread>
+#include <atomic>
 
 using namespace std;
 using json = nlohmann::json;
@@ -17,38 +19,17 @@ auto main() -> int
                              config["host"].get<string>(),
                              config["port"].get<int>());
 
-    CURL *curl;
-    CURLcode res;
+    httplib::Client client(base_url);
 
-    // Inicializar libcurl
-    curl_global_init(CURL_GLOBAL_DEFAULT);
-    curl = curl_easy_init();
-
-    if (curl)
+    auto res = client.Get("/");
+    if (res)
     {
-        // Establecer la URL
-        curl_easy_setopt(curl, CURLOPT_URL, base_url.c_str());
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, stdout);
-
-        // Realizar la solicitud GET
-        res = curl_easy_perform(curl);
-
-        // Comprobar si la solicitud fue exitosa
-        if (res != CURLE_OK)
-        {
-            std::cerr << "Error al hacer la solicitud: " << curl_easy_strerror(res) << std::endl;
-        }
-        else
-        {
-            std::cout << "Solicitud GET exitosa." << std::endl;
-        }
-
-        // Limpiar
-        curl_easy_cleanup(curl);
+        cout << res->status << endl;
+        cout << res->body << endl;
     }
-
-    // Finalizar libcurl
-    curl_global_cleanup();
-
+    else
+    {
+        cout << "Error: " << res.error() << endl;
+    }
     return 0;
 }

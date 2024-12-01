@@ -4,7 +4,9 @@
             "name": "Mac",
             "includePath": [
                 "${default}",
-                "/usr/local/opt/asio/include/**"
+                "/usr/local/opt/asio/include/**",
+                "${workspaceFolder}/backend/include/**",
+                "${workspaceFolder}/frontend/include/**"
             ],
             "defines": [],
             "macFrameworkPath": [

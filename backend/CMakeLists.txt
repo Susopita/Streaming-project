@@ -23,6 +23,7 @@ target_include_directories(Streaming_server PRIVATE
 # Enlazar bibliotecas necesarias
 target_link_libraries(Streaming_server PRIVATE
         nlohmann_json::nlohmann_json
+        Threads::Threads
         ${CMAKE_THREAD_LIBS_INIT}
 )
 
