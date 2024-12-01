@@ -2,8 +2,10 @@
 
 #include <string>
 #include <vector>
+#include <nlohmann/json.hpp>
 
 using namespace std;
+using json = nlohmann::json;
 
 class Pelicula
 {
@@ -25,4 +27,13 @@ public:
     void setTitulo(string titulo) { this->titulo = titulo; }
     void setSinopsis(string sinopsis) { this->sinopsis = sinopsis; }
     void setTags(vector<string> tags) { this->tags = tags; }
+
+    string dump() const
+    {
+        return json({{"id", id},
+                     {"titulo", titulo},
+                     {"sinopsis", sinopsis},
+                     {"tags", tags}})
+            .dump();
+    }
 };

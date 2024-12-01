@@ -6,7 +6,9 @@
                 "${default}",
                 "/usr/local/opt/asio/include/**",
                 "${workspaceFolder}/backend/include/**",
-                "${workspaceFolder}/frontend/include/**"
+                "${workspaceFolder}/frontend/include/**",
+                "${workspaceFolder}/build/_deps/json-src/single_include",
+                "/usr/local/Cellar/asio/1.30.2/include"
             ],
             "defines": [],
             "macFrameworkPath": [

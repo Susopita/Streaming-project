@@ -1,13 +1,12 @@
 # backend/CMakeList.txt
 
 # Archivos Fuentes
-file(GLOB_RECURSE SOURCES "backend/src/*.cpp")
+file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # Backend ejecutable
 add_executable(
         Streaming_server 
-        ${CMAKE_SOURCE_DIR}/backend/src/main.cpp
-        #${SOURCES}
+        ${SOURCES}
 )
 
 # Dependencias del backend

@@ -1,26 +1,36 @@
 #pragma once
 
 #include <string>
-#include <memory>
 #include <map>
 #include <optional>
-#include "../utils/singleton.hpp"
+#include <vector>
+#include <concepts>
+#include <type_traits>
 
 using namespace std;
 
-template <class index, class model>
-class Repository : public makeSingleton<Repository<index, model>>
-{
-    map<index, model> models;
-    Repository() = default;
+template <class T, class Index>
+concept ModelClass = requires(T t) {
+    { t.getId() }
+      -> same_as<Index>;
+};
 
+template <class Index, class Model>
+    requires ModelClass<Model, Index>
+class Repository
+{
 public:
-    virtual ~Repository();
-    index save(const model &model);
-    optional<model> getById(const index &index);
-    void update(const model &model);
-    void remove(const index &index);
+    virtual ~Repository() = default;
+    Index save(const Model &model);
+    optional<Model> getById(const Index &index);
+    vector<Model> getAll();
+    void update(const Model &model);
+    void remove(const Index &index);
 
 protected:
+    map<Index, Model> models;
     virtual void loadData(const string &dataRoute) = 0;
+    Repository() = default;
 };
+
+#include "../../src/data/repository.tpp"

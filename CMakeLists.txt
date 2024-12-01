@@ -12,6 +12,9 @@ include(FetchContent)
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
+# Incluir cabeceras
+#include_directories(${nlohmann_json_SOURCE_DIR}/single_include)
+
 # Subcarpetas del proyecto
 add_subdirectory(backend)
 add_subdirectory(frontend)
