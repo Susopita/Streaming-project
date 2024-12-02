@@ -9,7 +9,7 @@ using namespace std;
 
 vector<Pelicula> PeliculaService::buscarPeliculasConMotorBusqueda(const string &busqueda)
 {
-    return vector<Pelicula>{Pelicula{"1", "Pelicula 1", "Sinopsis de la pelicula 1", {"tag1", "tag2"}}};
+    return searchEngine->search(peliculaRepository, busqueda);
 }
 
 optional<Pelicula> PeliculaService::buscarPeliculaPorId(string id)

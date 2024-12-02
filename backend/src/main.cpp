@@ -2,6 +2,7 @@
 #include <core/crow_all.h>
 #include <fstream>
 #include <core/pelicula/application/peliculaController.hpp>
+#include <utils/configs.hpp>
 
 using namespace std;
 using json = nlohmann::json;
@@ -9,8 +10,7 @@ using json = nlohmann::json;
 int main()
 {
     // Variables de configuracion del servidor
-    ifstream file("../config/config.json");
-    json config = json::parse(file);
+    Configs &configs = Configs::getInstance();
 
     // Inicializa la aplicación
     crow::SimpleApp app;
@@ -26,6 +26,6 @@ int main()
      });
 
     // Inicia el servidor en el puerto 8080
-    app.port(config["port"]).multithreaded().run(); // El servidor estará escuchando en http://localhost:8080
+    app.port(configs["port"]).multithreaded().run(); // El servidor estará escuchando en http://localhost:8080
     return 0;
 }

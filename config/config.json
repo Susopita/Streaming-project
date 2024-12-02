@@ -1,5 +1,9 @@
 {
     "host": "localhost",
     "port": 8080,
-    "protocol": "http"
+    "protocol": "http",
+    "data": "../backend/database/limpio.csv",
+    "searchEngines": {
+        "Peliculas": "basic"
+    }
 }
