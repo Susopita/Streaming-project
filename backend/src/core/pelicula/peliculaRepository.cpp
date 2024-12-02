@@ -1,4 +1,4 @@
-#include <pelicula/infrastructure/peliculaRepository.hpp>
+#include <core/pelicula/infrastructure/peliculaRepository.hpp>
 
 #include <iostream>
 #include <fstream>

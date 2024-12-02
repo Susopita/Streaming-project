@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
-#include <utils/singleton.hpp>
+#include <core/utils/singleton.hpp>
 #include <vector>
 #include <optional>
-#include <pelicula/domain/pelicula.hpp>
-#include <pelicula/infrastructure/peliculaRepository.hpp>
+#include <core/pelicula/domain/pelicula.hpp>
+#include <core/pelicula/infrastructure/peliculaRepository.hpp>
 
 using namespace std;
 

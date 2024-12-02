@@ -1,8 +1,8 @@
-#include <pelicula/domain/peliculaService.hpp>
+#include <core/pelicula/domain/peliculaService.hpp>
 
 #include <string>
 #include <vector>
-#include <pelicula/domain/pelicula.hpp>
+#include <core/pelicula/domain/pelicula.hpp>
 #include <optional>
 
 using namespace std;

@@ -1,7 +1,7 @@
 #include <nlohmann/json.hpp>
-#include <crow_all.h>
+#include <core/crow_all.h>
 #include <fstream>
-#include <pelicula/application/peliculaController.hpp>
+#include <core/pelicula/application/peliculaController.hpp>
 
 using namespace std;
 using json = nlohmann::json;

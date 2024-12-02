@@ -1,9 +1,9 @@
 #pragma once
 
 #include <string>
-#include <data/repository.hpp>
-#include <utils/singleton.hpp>
-#include <pelicula/domain/pelicula.hpp>
+#include <core/data/repository.hpp>
+#include <core/utils/singleton.hpp>
+#include <core/pelicula/domain/pelicula.hpp>
 
 using namespace std;
 

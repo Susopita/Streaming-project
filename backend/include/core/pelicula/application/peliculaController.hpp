@@ -1,10 +1,10 @@
 #pragma once
 
-#include <crow_all.h>
-#include <pelicula/domain/peliculaService.hpp>
+#include <core/crow_all.h>
+#include <core/pelicula/domain/peliculaService.hpp>
 #include <nlohmann/json.hpp>
 #include <algorithm>
-#include <utils/responseEntity.hpp>
+#include <core/utils/responseEntity.hpp>
 
 using json = nlohmann::json;
 
