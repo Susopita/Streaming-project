@@ -5,6 +5,10 @@ project(Streaming LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(SOURCE_DIR ${CMAKE_SOURCE_DIR})
 
+if (WIN32)
+    add_definitions(-D_WIN32_WINNT=0x0A00)
+endif()
+
 # Incluir bibliotecas
 include(FetchContent)
 
@@ -70,6 +74,11 @@ if (APPLE)
     )
 elseif(WIN32)
     # Ejecutar en cmd
+    add_custom_target(run
+        COMMAND cmd /c start "" cmd /c ./backend/Streaming_server
+        COMMAND cmd /c start "" cmd /c ./frontend/Streaming_client
+        COMMENT "Ejecutando servidor y cliente en Windows"
+    )
     add_custom_target(run_backend
         COMMAND cmd /c start "" ./backend/Debug/Streaming_server
         DEPENDS Streaming_server
