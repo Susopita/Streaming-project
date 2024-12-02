@@ -10,20 +10,17 @@ add_executable(
         #${SOURCES}
 )
 
-find_package(CURL REQUIRED)
 find_package(Threads REQUIRED)
 
 # Archivos de cabecera
 target_include_directories(Streaming_client PRIVATE 
         ${CMAKE_SOURCE_DIR}/frontend/include
-        ${CURL_INCLUDE_DIRS}
 )
 
 # Enlazar Bibliotecas necesarias
 target_link_libraries(Streaming_client PRIVATE
         nlohmann_json::nlohmann_json
         Threads::Threads
-        ${CURL_LIBRARIES}
 )
 
 # Si usas bibliotecas externas para la UI (Qt, wxWidgets, etc.)
