@@ -5,5 +5,9 @@
     "data": "../backend/database/limpio.csv",
     "searchEngines": {
         "Peliculas": "basic"
+    },
+    "dataLimits": {
+        "superior": 100,
+        "inferior": 0
     }
 }

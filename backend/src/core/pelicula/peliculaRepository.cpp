@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <regex>
+#include <utils/configs.hpp>
 
 using namespace std;
 
@@ -116,12 +117,29 @@ void PeliculaRepository::loadData(const string &dataRoute)
     }
     cout << "-------------------------" << endl;
 
+    // Procesar el contenido de los datos
     while (getline(contentStream, line))
     {
         // Procesar solo si la línea no está vacía
         if (!line.empty())
         {
             fields = parseCSVLine(line);
+
+            // Obtener el alcanze de los datos
+            Configs &configs = Configs::getInstance();
+
+            int upperLimit = configs.contains("dataLimits") &&
+                                     configs["dataLimits"].contains("superior") &&
+                                     configs["dataLimits"]["superior"].is_number_unsigned()
+                                 ? configs["dataLimits"]["superior"].get<int>()
+                                 : fields.size();
+
+            int lowerLimit = configs.contains("dataLimits") &&
+                                     configs["dataLimits"].contains("inferior") &&
+                                     configs["dataLimits"]["inferior"].is_number_unsigned()
+                                 ? configs["dataLimits"]["inferior"].get<int>()
+                                 : 0;
+
             // Si ya hemos procesado los encabezados, seguimos mapeando los valores
             /*
             cout << "Campos de los datos:" << endl;
@@ -129,13 +147,14 @@ void PeliculaRepository::loadData(const string &dataRoute)
             {
                 cout << "Campo: " << field << endl;
             }*/
+
             if (fields.size() % headersSize != 0)
             {
                 cerr << "Error en la cantidad de campos en la línea: " << line << endl;
                 continue;
             }
 
-            for (auto i = 0; i < fields.size(); i += headersSize)
+            for (auto i = lowerLimit * headersSize; i < upperLimit * headersSize; i += headersSize)
             {
                 models[fields[i]] = Pelicula(fields[i], fields[i + 1], fields[i + 2], parseStringToVector(fields[i + 3], ' ', ','));
             }
