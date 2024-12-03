@@ -1,13 +1,12 @@
 # frontend/CMakeLists.txt
 
 # Archivos Fuentes
-file(GLOB_RECURSE SOURCES "frontend/src/*.cpp")
+file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # Frontend ejecutable
 add_executable(
         Streaming_client
-        ${CMAKE_SOURCE_DIR}/frontend/src/main.cpp
-        #${SOURCES}
+        ${SOURCES}
 )
 
 find_package(Threads REQUIRED)

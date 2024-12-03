@@ -20,10 +20,13 @@ template <class Index, class Model>
 class Repository
 {
 public:
+    using IndexType = Index;
+    using ModelType = Model;
+
     virtual ~Repository() = default;
     Index save(const Model &model);
-    optional<Model> getById(const Index &index);
-    vector<Model> getAll();
+    optional<Model> getById(const Index &index) const;
+    vector<Model> getAll() const;
     void update(const Model &model);
     void remove(const Index &index);
 

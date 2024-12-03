@@ -2,6 +2,7 @@
 
 #include <concepts>
 #include <optional>
+#include <iostream>
 
 using namespace std;
 
@@ -16,24 +17,26 @@ Index Repository<Index, Model>::save(const Model &model)
 template <class Index, class Model>
     requires ModelClass<Model, Index>
 optional<Model> Repository<Index, Model>::getById(const Index
-                                                      &index)
+                                                      &index) const
 {
-    if (models.find(index) != models.end())
+    auto it = models.find(index); // Busca la clave
+    if (it != models.end())
     {
-        return models[index];
+        return it->second; // Retorna el valor si se encuentra
     }
-    return nullopt;
+    return std::nullopt; // Retorna 'nullopt' si no se encuentra
 }
 
 template <class Index, class Model>
     requires ModelClass<Model, Index>
-vector<Model> Repository<Index, Model>::getAll()
+vector<Model> Repository<Index, Model>::getAll() const
 {
     vector<Model> all;
     for (auto &model : models)
     {
         all.push_back(model.second);
     }
+    cout << "cantidad: " << all.size() << endl;
     return all;
 }
 

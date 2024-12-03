@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <regex>
+#include <utils/configs.hpp>
 
 using namespace std;
 
@@ -50,6 +51,23 @@ vector<string> parseCSVLine(const string &line, char delimiter = ',', char quote
     return fields;
 }
 
+vector<string> parseStringToVector(const string &line, char delimiter = ' ', char charToRemove = '\0')
+{
+    vector<string> fields;
+    stringstream ss(line);
+    string field;
+    while (getline(ss, field, delimiter))
+    {
+        // Verifica si el campo no está vacío y si el último carácter es el que deseas eliminar
+        if (!field.empty() && field.back() == charToRemove)
+        {
+            field.pop_back();
+        }
+        fields.push_back(field);
+    }
+    return fields;
+}
+
 // Función para leer un archivo CSV con saltos de línea dentro de los campos
 // Para abrir archivos .csv
 void PeliculaRepository::loadData(const string &dataRoute)
@@ -90,6 +108,7 @@ void PeliculaRepository::loadData(const string &dataRoute)
     vector<string> fields;
 
     fields = parseCSVLine(headers);
+    int headersSize = fields.size();
     // Imprimir los encabezados para verificar
     cout << "Campos (Encabezados):" << endl;
     for (const auto &field : fields)
@@ -98,12 +117,29 @@ void PeliculaRepository::loadData(const string &dataRoute)
     }
     cout << "-------------------------" << endl;
 
+    // Procesar el contenido de los datos
     while (getline(contentStream, line))
     {
         // Procesar solo si la línea no está vacía
         if (!line.empty())
         {
             fields = parseCSVLine(line);
+
+            // Obtener el alcanze de los datos
+            Configs &configs = Configs::getInstance();
+
+            int upperLimit = configs.contains("dataLimits") &&
+                                     configs["dataLimits"].contains("superior") &&
+                                     configs["dataLimits"]["superior"].is_number_unsigned()
+                                 ? configs["dataLimits"]["superior"].get<int>()
+                                 : fields.size();
+
+            int lowerLimit = configs.contains("dataLimits") &&
+                                     configs["dataLimits"].contains("inferior") &&
+                                     configs["dataLimits"]["inferior"].is_number_unsigned()
+                                 ? configs["dataLimits"]["inferior"].get<int>()
+                                 : 0;
+
             // Si ya hemos procesado los encabezados, seguimos mapeando los valores
             /*
             cout << "Campos de los datos:" << endl;
@@ -111,7 +147,17 @@ void PeliculaRepository::loadData(const string &dataRoute)
             {
                 cout << "Campo: " << field << endl;
             }*/
-            models[fields[0]] = Pelicula(fields[0], fields[1], fields[2], parseCSVLine(fields[3]));
+
+            if (fields.size() % headersSize != 0)
+            {
+                cerr << "Error en la cantidad de campos en la línea: " << line << endl;
+                continue;
+            }
+
+            for (auto i = lowerLimit * headersSize; i < upperLimit * headersSize; i += headersSize)
+            {
+                models[fields[i]] = Pelicula(fields[i], fields[i + 1], fields[i + 2], parseStringToVector(fields[i + 3], ' ', ','));
+            }
         }
     }
 }
