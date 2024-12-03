@@ -1,6 +1,5 @@
 #include <nlohmann/json.hpp>
 #include <core/crow_all.h>
-#include <fstream>
 #include <core/pelicula/application/peliculaController.hpp>
 #include <utils/configs.hpp>
 

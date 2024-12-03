@@ -6,3 +6,5 @@
 server
 client
 test/
+.vs/
+.vscode/

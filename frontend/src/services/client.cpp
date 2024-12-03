@@ -17,7 +17,7 @@ vector<Pelicula> Client::search_peliculas(const string &query)
     httplib::Client cli("localhost", 8080);
 
     cli.set_connection_timeout(5); // segundos
-    cli.set_read_timeout(5);       // segundos
+    // cli.set_read_timeout(5);       // segundos
 
     // Definir los parámetros de consulta
     httplib::Params params = {{"buscar", query}};
