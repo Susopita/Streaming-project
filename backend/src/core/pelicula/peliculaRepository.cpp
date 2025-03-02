@@ -14,8 +14,6 @@ using namespace std;
 vector<string> parseCSVLine(const string &line, char delimiter = ',', char quote = '"')
 {
     vector<string> fields;
-    stringstream ss(line);
-    string field;
     bool insideQuote = false;
     string currentField;
 
@@ -89,7 +87,11 @@ void PeliculaRepository::loadData(const string &dataRoute)
     while (getline(file, line))
     {
         // Si no estamos dentro de un campo de texto (dentro de comillas)
-        if (line.back() == '"' && count(line.begin(), line.end(), '"') % 2 == 0)
+        if (line.empty())
+        {
+            cout << "Linea: " << "'" << line << "'" << endl;
+        }
+        else if (line.back() == '"' && count(line.begin(), line.end(), '"') % 2 == 0)
         {
             fullContent += line + "\n";
         }
@@ -118,46 +120,50 @@ void PeliculaRepository::loadData(const string &dataRoute)
     cout << "-------------------------" << endl;
 
     // Procesar el contenido de los datos
-    while (getline(contentStream, line))
+    // while (getline(contentStream, line))
+    //{
+    // Procesar solo si la línea no está vacía
+    if (!fullContent.empty())
     {
-        // Procesar solo si la línea no está vacía
-        if (!line.empty())
+        fields = parseCSVLine(fullContent);
+
+        // Obtener el alcanze de los datos
+        Configs &configs = Configs::getInstance();
+
+        int upperLimit = configs.contains("dataLimits") &&
+                                 configs["dataLimits"].contains("superior") &&
+                                 configs["dataLimits"]["superior"].is_number_unsigned()
+                             ? configs["dataLimits"]["superior"].get<int>()
+                             : fields.size();
+
+        int lowerLimit = configs.contains("dataLimits") &&
+                                 configs["dataLimits"].contains("inferior") &&
+                                 configs["dataLimits"]["inferior"].is_number_unsigned()
+                             ? configs["dataLimits"]["inferior"].get<int>()
+                             : 0;
+
+        // Si ya hemos procesado los encabezados, seguimos mapeando los valores
+        /*
+        cout << "Campos de los datos:" << endl;
+        for (const auto &field : fields)
         {
-            fields = parseCSVLine(line);
+            cout << "Campo: " << field << endl;
+        }*/
 
-            // Obtener el alcanze de los datos
-            Configs &configs = Configs::getInstance();
-
-            int upperLimit = configs.contains("dataLimits") &&
-                                     configs["dataLimits"].contains("superior") &&
-                                     configs["dataLimits"]["superior"].is_number_unsigned()
-                                 ? configs["dataLimits"]["superior"].get<int>()
-                                 : fields.size();
-
-            int lowerLimit = configs.contains("dataLimits") &&
-                                     configs["dataLimits"].contains("inferior") &&
-                                     configs["dataLimits"]["inferior"].is_number_unsigned()
-                                 ? configs["dataLimits"]["inferior"].get<int>()
-                                 : 0;
-
-            // Si ya hemos procesado los encabezados, seguimos mapeando los valores
+        if (fields.size() % headersSize <= 4)
+        {
             /*
-            cout << "Campos de los datos:" << endl;
-            for (const auto &field : fields)
-            {
-                cout << "Campo: " << field << endl;
-            }*/
+            cerr << "Error en la cantidad de campos en la linea" << endl;
+            cerr << "Cantidad de campos: " << fields.size() << endl;
+            cerr << "Cantidad de encabezados: " << headersSize << endl;
+            cerr << "Modulo: " << fields.size() % headersSize << endl;*/
+            // continue;
+        }
 
-            if (fields.size() % headersSize != 0)
-            {
-                cerr << "Error en la cantidad de campos en la línea: " << line << endl;
-                continue;
-            }
-
-            for (auto i = lowerLimit * headersSize; i < upperLimit * headersSize; i += headersSize)
-            {
-                models[fields[i]] = Pelicula(fields[i], fields[i + 1], fields[i + 2], parseStringToVector(fields[i + 3], ' ', ','));
-            }
+        for (auto i = lowerLimit * headersSize; i < fields.size() && i < upperLimit * headersSize; i += headersSize)
+        {
+            models[fields[i]] = Pelicula(fields[i], fields[i + 1], fields[i + 2], parseStringToVector(fields[i + 3], ' ', ','));
         }
     }
+    //}
 }
