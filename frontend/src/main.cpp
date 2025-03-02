@@ -66,7 +66,7 @@ int main()
                     std::cout << "-----------------------------\n";
                     std::cout << "ID: " << pelicula.id << "\n";
                     std::cout << "Título: " << pelicula.titulo << "\n";
-                    std::cout << "Sinopsis: " << pelicula.sinopsis << "\n";
+                    // std::cout << "Sinopsis: " << pelicula.sinopsis << "\n";
                     std::cout << "Tags: ";
                     for (const auto &tag : pelicula.tags)
                     {
